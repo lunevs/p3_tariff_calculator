@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.fastdelivery.domain.common.currency.Currency;
 import ru.fastdelivery.domain.common.currency.CurrencyFactory;
-import ru.fastdelivery.properties.provider.PricesRublesProperties;
+import ru.fastdelivery.properties.provider.WeightPricesRublesProperties;
 
 import java.math.BigDecimal;
 
@@ -13,21 +13,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class PricesRublesPropertiesTest {
+class WeightPricesRublesPropertiesTest {
 
     public static final BigDecimal PER_KG = BigDecimal.valueOf(50);
     public static final BigDecimal MINIMAL = BigDecimal.valueOf(100);
     public static final String RUB = "RUB";
     final CurrencyFactory currencyFactory = mock(CurrencyFactory.class);
-    PricesRublesProperties properties;
+    WeightPricesRublesProperties properties;
 
     @BeforeEach
     void init(){
-        properties = new PricesRublesProperties();
-        properties.setCurrencyFactory(currencyFactory);
+        properties = new WeightPricesRublesProperties(currencyFactory);
 
         properties.setPerKg(PER_KG);
-        properties.setMinimal(MINIMAL);
+        properties.setMinimalPricePerKg(MINIMAL);
 
         var currency = mock(Currency.class);
         when(currency.getCode()).thenReturn(RUB);

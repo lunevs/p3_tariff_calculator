@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fastdelivery.domain.common.currency.CurrencyFactory;
+import ru.fastdelivery.domain.common.dimension.Dimension;
 import ru.fastdelivery.domain.common.weight.Weight;
 import ru.fastdelivery.domain.delivery.pack.Pack;
 import ru.fastdelivery.domain.delivery.shipment.Shipment;
@@ -35,15 +36,23 @@ public class CalculateController {
     })
     public CalculatePackagesResponse calculate(
             @Valid @RequestBody CalculatePackagesRequest request) {
+//        var packsWeights = request.packages().stream()
+//                .map(CargoPackage::weight)
+//                .map(Weight::new)
+//                .map(Pack::new)
+//                .toList();
+
         var packsWeights = request.packages().stream()
-                .map(CargoPackage::weight)
-                .map(Weight::new)
-                .map(Pack::new)
+                .map(cargoPackage -> {
+                    Weight weight = new Weight(cargoPackage.weight());
+                    Dimension dimension = Dimension.of(cargoPackage.height(), cargoPackage.width(), cargoPackage.length());
+                    return new Pack(weight, dimension);
+                })
                 .toList();
 
         var shipment = new Shipment(packsWeights, currencyFactory.create(request.currencyCode()));
         var calculatedPrice = tariffCalculateUseCase.calc(shipment);
-        var minimalPrice = tariffCalculateUseCase.minimalPrice();
+        var minimalPrice = tariffCalculateUseCase.minimalPriceForWeight();
         return new CalculatePackagesResponse(calculatedPrice, minimalPrice);
     }
 }

@@ -10,18 +10,32 @@ import javax.inject.Named;
 @RequiredArgsConstructor
 public class TariffCalculateUseCase {
     private final WeightPriceProvider weightPriceProvider;
+    private final VolumePriceProvider volumePriceProvider;
 
     public Price calc(Shipment shipment) {
         var weightAllPackagesKg = shipment.weightAllPackages().kilograms();
-        var minimalPrice = weightPriceProvider.minimalPrice();
+        var volumeAllPackages = shipment.volumeAllPackages();
+        var minimalPriceByWeight = weightPriceProvider.minimalPrice();
+        var minimalPriceByVolume = volumePriceProvider.minimalPrice();
+
+        Price volumePrice = volumePriceProvider
+                .costPerMeter()
+                .multiply(volumeAllPackages)
+                .max(minimalPriceByVolume);
 
         return weightPriceProvider
                 .costPerKg()
                 .multiply(weightAllPackagesKg)
-                .max(minimalPrice);
+                .max(minimalPriceByWeight)
+                .max(volumePrice);
     }
 
-    public Price minimalPrice() {
+    public Price minimalPriceForWeight() {
         return weightPriceProvider.minimalPrice();
     }
+
+    public Price minimalPriceForVolume() {
+        return volumePriceProvider.minimalPrice();
+    }
+
 }

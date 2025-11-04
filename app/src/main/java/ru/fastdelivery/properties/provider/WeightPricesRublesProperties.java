@@ -1,8 +1,9 @@
 package ru.fastdelivery.properties.provider;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.fastdelivery.domain.common.currency.CurrencyFactory;
 import ru.fastdelivery.domain.common.price.Price;
 import ru.fastdelivery.usecase.WeightPriceProvider;
@@ -12,15 +13,18 @@ import java.math.BigDecimal;
 /**
  * Настройки базовых цен стоимости перевозки из конфига
  */
-@ConfigurationProperties("cost.rub")
+@Component
 @Setter
-public class PricesRublesProperties implements WeightPriceProvider {
+@RequiredArgsConstructor
+public class WeightPricesRublesProperties implements WeightPriceProvider {
 
+    @Value("${cost.rub.perKg}")
     private BigDecimal perKg;
-    private BigDecimal minimal;
 
-    @Autowired
-    private CurrencyFactory currencyFactory;
+    @Value("${cost.rub.minimalPricePerKg}")
+    private BigDecimal minimalPricePerKg;
+
+    private final CurrencyFactory currencyFactory;
 
     @Override
     public Price costPerKg() {
@@ -29,6 +33,6 @@ public class PricesRublesProperties implements WeightPriceProvider {
 
     @Override
     public Price minimalPrice() {
-        return new Price(minimal, currencyFactory.create("RUB"));
+        return new Price(minimalPricePerKg, currencyFactory.create("RUB"));
     }
 }
