@@ -2,16 +2,15 @@ package ru.fastdelivery.properties.provider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import ru.fastdelivery.domain.common.currency.CurrencyFactory;
 import ru.fastdelivery.domain.common.price.Price;
 import ru.fastdelivery.usecase.VolumePriceProvider;
 
 import java.math.BigDecimal;
 
-@Component
+@Configuration
 @Setter
 @RequiredArgsConstructor
 public class VolumePricesRublesProperties implements VolumePriceProvider {

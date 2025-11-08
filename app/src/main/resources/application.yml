@@ -5,5 +5,15 @@ cost:
   rub:
     perKg: 400
     minimalPricePerKg: 350
-    perMetre: 400
+    perMetre: 1000
     minimalPricePerMetre: 350
+
+coordinates:
+  distance:
+    min: 450 # kilometres
+  latitude:
+    min: 45
+    max: 65
+  longitude:
+    min: 30
+    max: 96

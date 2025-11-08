@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import ru.fastdelivery.domain.common.currency.Currency;
 import ru.fastdelivery.domain.common.currency.CurrencyFactory;
 import ru.fastdelivery.domain.common.dimension.Dimension;
+import ru.fastdelivery.domain.common.distance.CoordinatesCheckProvider;
+import ru.fastdelivery.domain.common.distance.Distance;
+import ru.fastdelivery.domain.common.distance.DistanceFactory;
 import ru.fastdelivery.domain.common.price.Price;
 import ru.fastdelivery.domain.common.weight.Weight;
 import ru.fastdelivery.domain.delivery.pack.Pack;
@@ -16,6 +19,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,9 +27,10 @@ class TariffCalculateUseCaseTest {
 
     final WeightPriceProvider weightPriceProvider = mock(WeightPriceProvider.class);
     final VolumePriceProvider volumePriceProvider = mock(VolumePriceProvider.class);
+    final DistanceCalculateProvider distanceCalculateProvider = mock(DistanceCalculateProvider.class);
     final Currency currency = new CurrencyFactory(code -> true).create("RUB");
 
-    final TariffCalculateUseCase tariffCalculateUseCase = new TariffCalculateUseCase(weightPriceProvider, volumePriceProvider);
+    final TariffCalculateUseCase tariffCalculateUseCase = new TariffCalculateUseCase(weightPriceProvider, volumePriceProvider, distanceCalculateProvider);
 
     @Test
     @DisplayName("Расчет стоимости доставки по весу -> успешно")
@@ -39,6 +44,7 @@ class TariffCalculateUseCaseTest {
         when(weightPriceProvider.minimalPrice()).thenReturn(minimalPrice);
         when(weightPriceProvider.costPerKg()).thenReturn(pricePerKg);
         when(volumePriceProvider.costPerMeter()).thenReturn(pricePerMeter);
+        when(distanceCalculateProvider.calcDistanceCoefficient(any())).thenReturn(BigDecimal.ONE);
 
         var shipment = new Shipment(
                 List.of(
@@ -47,7 +53,7 @@ class TariffCalculateUseCaseTest {
                 new CurrencyFactory(code -> true).create("RUB"));
         var expectedPrice = new Price(BigDecimal.valueOf(120), currency);
 
-        var actualPrice = tariffCalculateUseCase.calc(shipment);
+        var actualPrice = tariffCalculateUseCase.calc(shipment, BigDecimal.valueOf(450));
 
         assertThat(actualPrice).usingRecursiveComparison()
                 .withComparatorForType(BigDecimalComparator.BIG_DECIMAL_COMPARATOR, BigDecimal.class)
@@ -66,6 +72,7 @@ class TariffCalculateUseCaseTest {
         when(weightPriceProvider.minimalPrice()).thenReturn(minimalPrice);
         when(weightPriceProvider.costPerKg()).thenReturn(pricePerKg);
         when(volumePriceProvider.costPerMeter()).thenReturn(pricePerMeter);
+        when(distanceCalculateProvider.calcDistanceCoefficient(any())).thenReturn(BigDecimal.ONE);
 
         var shipment = new Shipment(
                 List.of(
@@ -74,7 +81,7 @@ class TariffCalculateUseCaseTest {
                 new CurrencyFactory(code -> true).create("RUB"));
         var expectedPrice = new Price(BigDecimal.valueOf(1000), currency);
 
-        var actualPrice = tariffCalculateUseCase.calc(shipment);
+        var actualPrice = tariffCalculateUseCase.calc(shipment, BigDecimal.valueOf(450));
 
         assertThat(actualPrice).usingRecursiveComparison()
                 .withComparatorForType(BigDecimalComparator.BIG_DECIMAL_COMPARATOR, BigDecimal.class)

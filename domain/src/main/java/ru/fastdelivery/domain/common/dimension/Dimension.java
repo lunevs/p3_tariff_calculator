@@ -1,7 +1,6 @@
 package ru.fastdelivery.domain.common.dimension;
 
 import lombok.Getter;
-import ru.fastdelivery.domain.common.weight.Weight;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

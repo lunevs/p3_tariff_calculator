@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.fastdelivery.domain.common.currency.CurrencyFactory;
 import ru.fastdelivery.domain.common.dimension.Dimension;
+import ru.fastdelivery.domain.common.distance.DistanceFactory;
 import ru.fastdelivery.domain.common.weight.Weight;
 import ru.fastdelivery.domain.delivery.pack.Pack;
 import ru.fastdelivery.domain.delivery.shipment.Shipment;
 import ru.fastdelivery.presentation.api.request.CalculatePackagesRequest;
 import ru.fastdelivery.presentation.api.request.CargoPackage;
 import ru.fastdelivery.presentation.api.response.CalculatePackagesResponse;
+import ru.fastdelivery.usecase.DistanceCalculateService;
 import ru.fastdelivery.usecase.TariffCalculateUseCase;
 
 @RestController
@@ -27,6 +29,8 @@ import ru.fastdelivery.usecase.TariffCalculateUseCase;
 public class CalculateController {
     private final TariffCalculateUseCase tariffCalculateUseCase;
     private final CurrencyFactory currencyFactory;
+    private final DistanceCalculateService distanceCalculateService;
+    private final DistanceFactory distanceFactory;
 
     @PostMapping
     @Operation(summary = "Расчет стоимости по упаковкам груза")
@@ -36,11 +40,6 @@ public class CalculateController {
     })
     public CalculatePackagesResponse calculate(
             @Valid @RequestBody CalculatePackagesRequest request) {
-//        var packsWeights = request.packages().stream()
-//                .map(CargoPackage::weight)
-//                .map(Weight::new)
-//                .map(Pack::new)
-//                .toList();
 
         var packsWeights = request.packages().stream()
                 .map(cargoPackage -> {
@@ -51,7 +50,13 @@ public class CalculateController {
                 .toList();
 
         var shipment = new Shipment(packsWeights, currencyFactory.create(request.currencyCode()));
-        var calculatedPrice = tariffCalculateUseCase.calc(shipment);
+        var distance = distanceCalculateService.calculateDistance(distanceFactory.create(
+                request.departure().longitude(),
+                request.departure().latitude(),
+                request.destination().longitude(),
+                request.destination().latitude()
+        ));
+        var calculatedPrice = tariffCalculateUseCase.calc(shipment, distance);
         var minimalPrice = tariffCalculateUseCase.minimalPriceForWeight();
         return new CalculatePackagesResponse(calculatedPrice, minimalPrice);
     }
