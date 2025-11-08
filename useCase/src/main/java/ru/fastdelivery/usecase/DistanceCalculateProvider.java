@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 
 public interface DistanceCalculateProvider {
 
-    public BigDecimal calcDistanceCoefficient(BigDecimal distance);
+    BigDecimal calcDistanceCoefficient(BigDecimal distance);
 
 }

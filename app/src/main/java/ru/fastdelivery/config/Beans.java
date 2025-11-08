@@ -7,6 +7,7 @@ import ru.fastdelivery.domain.common.currency.CurrencyPropertiesProvider;
 import ru.fastdelivery.domain.common.distance.CoordinatesCheckProvider;
 import ru.fastdelivery.domain.common.distance.DistanceFactory;
 import ru.fastdelivery.properties.provider.CoordinatesCheckProperties;
+import ru.fastdelivery.properties.provider.DistanceCalculateProperties;
 import ru.fastdelivery.usecase.DistanceCalculateService;
 import ru.fastdelivery.usecase.TariffCalculateUseCase;
 import ru.fastdelivery.usecase.VolumePriceProvider;
@@ -24,8 +25,8 @@ public class Beans {
     }
 
     @Bean
-    public TariffCalculateUseCase tariffCalculateUseCase(WeightPriceProvider weightPriceProvider, VolumePriceProvider volumePriceProvider) {
-        return new TariffCalculateUseCase(weightPriceProvider, volumePriceProvider);
+    public TariffCalculateUseCase tariffCalculateUseCase(WeightPriceProvider weightPriceProvider, VolumePriceProvider volumePriceProvider, DistanceCalculateProperties distanceCalculateProperties) {
+        return new TariffCalculateUseCase(weightPriceProvider, volumePriceProvider, distanceCalculateProperties);
     }
 
     @Bean

@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 @Value
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class Distance {
-    BigDecimal destinationLongitude;
-    BigDecimal destinationLatitude;
-    BigDecimal departureLongitude;
     BigDecimal departureLatitude;
+    BigDecimal departureLongitude;
+    BigDecimal destinationLatitude;
+    BigDecimal destinationLongitude;
 }

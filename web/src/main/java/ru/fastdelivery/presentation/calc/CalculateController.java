@@ -17,7 +17,6 @@ import ru.fastdelivery.domain.common.weight.Weight;
 import ru.fastdelivery.domain.delivery.pack.Pack;
 import ru.fastdelivery.domain.delivery.shipment.Shipment;
 import ru.fastdelivery.presentation.api.request.CalculatePackagesRequest;
-import ru.fastdelivery.presentation.api.request.CargoPackage;
 import ru.fastdelivery.presentation.api.response.CalculatePackagesResponse;
 import ru.fastdelivery.usecase.DistanceCalculateService;
 import ru.fastdelivery.usecase.TariffCalculateUseCase;
@@ -51,10 +50,10 @@ public class CalculateController {
 
         var shipment = new Shipment(packsWeights, currencyFactory.create(request.currencyCode()));
         var distance = distanceCalculateService.calculateDistance(distanceFactory.create(
-                request.departure().longitude(),
                 request.departure().latitude(),
-                request.destination().longitude(),
-                request.destination().latitude()
+                request.departure().longitude(),
+                request.destination().latitude(),
+                request.destination().longitude()
         ));
         var calculatedPrice = tariffCalculateUseCase.calc(shipment, distance);
         var minimalPrice = tariffCalculateUseCase.minimalPriceForWeight();

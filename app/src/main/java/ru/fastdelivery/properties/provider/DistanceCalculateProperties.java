@@ -24,7 +24,7 @@ public class DistanceCalculateProperties implements DistanceCalculateProvider {
         if (distance.compareTo(BigDecimal.valueOf(distanceMin)) < 0) {
             return BigDecimal.ONE;
         } else {
-            return distance.divide(BigDecimal.valueOf(distanceMin), 2, RoundingMode.HALF_UP);
+            return distance.divide(BigDecimal.valueOf(distanceMin), 2, RoundingMode.UP);
         }
     }
 }

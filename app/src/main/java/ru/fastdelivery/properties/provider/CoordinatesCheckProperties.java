@@ -26,13 +26,13 @@ public class CoordinatesCheckProperties implements CoordinatesCheckProvider {
 
     @Override
     public boolean checkLatitude(BigDecimal latitude) {
-        return latitude.compareTo(BigDecimal.valueOf(latitudeMax)) >= 0 &&
-                latitude.compareTo(BigDecimal.valueOf(latitudeMin)) <= 0;
+        return latitude.compareTo(BigDecimal.valueOf(latitudeMax)) <= 0 &&
+                latitude.compareTo(BigDecimal.valueOf(latitudeMin)) >= 0;
     }
 
     @Override
     public boolean checkLongitude(BigDecimal longitude) {
-        return longitude.compareTo(BigDecimal.valueOf(longitudeMax)) >= 0 &&
-                longitude.compareTo(BigDecimal.valueOf(longitudeMin)) <= 0;
+        return longitude.compareTo(BigDecimal.valueOf(longitudeMax)) <= 0 &&
+                longitude.compareTo(BigDecimal.valueOf(longitudeMin)) >= 0;
     }
 }

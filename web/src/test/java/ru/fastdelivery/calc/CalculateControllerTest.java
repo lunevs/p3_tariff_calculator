@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import ru.fastdelivery.ControllerTest;
 import ru.fastdelivery.domain.common.currency.CurrencyFactory;
+import ru.fastdelivery.domain.common.distance.DistanceFactory;
 import ru.fastdelivery.domain.common.price.Price;
 import ru.fastdelivery.presentation.api.request.CalculatePackagesRequest;
 import ru.fastdelivery.presentation.api.request.CargoPackage;
@@ -27,8 +28,12 @@ class CalculateControllerTest extends ControllerTest {
     final String baseCalculateApi = "/api/v1/calculate/";
     @MockBean
     TariffCalculateUseCase useCase;
+
     @MockBean
     CurrencyFactory currencyFactory;
+
+    @MockBean
+    DistanceFactory distanceFactory;
 
     @Test
     @DisplayName("Валидные данные для расчета стоимость -> Ответ 200")

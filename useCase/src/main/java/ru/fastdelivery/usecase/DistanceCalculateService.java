@@ -41,7 +41,7 @@ public class DistanceCalculateService {
         double denominator = denominator(cl1, cl2, sl1, sl2, cdelta);
 
         if (denominator == 0) {
-            throw new IllegalArgumentException("Cannot calculate distance because no distance found");
+            throw new IllegalArgumentException("Cannot calculate distance because denominator is zero");
         }
 
         double atan = Math.atan(Math.abs(numerator/denominator));

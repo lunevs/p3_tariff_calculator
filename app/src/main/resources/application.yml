@@ -10,7 +10,7 @@ cost:
 
 coordinates:
   distance:
-    min: 450 # kilometres
+    min: 450_000 # metres
   latitude:
     min: 45
     max: 65

@@ -9,13 +9,13 @@ public class DistanceFactory {
 
     private final CoordinatesCheckProvider checker;
 
-    public Distance create(BigDecimal destinationLongitude, BigDecimal destinationLatitude, BigDecimal departureLongitude, BigDecimal departureLatitude) {
-        if (checker.checkLatitude(departureLatitude) || checker.checkLatitude(destinationLatitude)) {
-            throw new IllegalArgumentException("latitude has incorrect value");
+    public Distance create(BigDecimal departureLatitude, BigDecimal departureLongitude, BigDecimal destinationLatitude, BigDecimal destinationLongitude) {
+        if (!checker.checkLatitude(departureLatitude) || !checker.checkLatitude(destinationLatitude)) {
+            throw new IllegalArgumentException("latitude has incorrect value: " + departureLatitude + ", " + destinationLatitude);
         }
-        if (checker.checkLongitude(departureLongitude) || checker.checkLongitude(destinationLongitude)) {
-            throw new IllegalArgumentException("longitude has incorrect value");
+        if (!checker.checkLongitude(departureLongitude) || !checker.checkLongitude(destinationLongitude)) {
+            throw new IllegalArgumentException("longitude has incorrect value: " + departureLongitude + ", " + destinationLongitude);
         }
-        return new Distance(destinationLongitude, destinationLatitude, departureLongitude, departureLatitude);
+        return new Distance(departureLatitude, departureLongitude, destinationLatitude, destinationLongitude);
     }
 }
