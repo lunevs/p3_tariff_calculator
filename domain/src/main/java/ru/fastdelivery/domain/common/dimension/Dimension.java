@@ -21,6 +21,9 @@ public class Dimension implements Comparable<Dimension>  {
     }
 
     public static Dimension of(BigInteger height, BigInteger width, BigInteger length) {
+        if (height == null || width == null || length == null) {
+            throw new IllegalArgumentException("Dimensions can't be empty!");
+        }
         if (isLessThanZero(height) || isLessThanZero(width) || isLessThanZero(length)) {
             throw new IllegalArgumentException("Dimensions cannot be below Zero!");
         }
